@@ -78,13 +78,13 @@
 
     <script>
       const firebaseConfig = {
-        apiKey: process.env.API_KEY,
-        authDomain: process.env.AUTHDOMAIN,
-        databaseURL: process.env.DATABASEURL,
-        projectId: process.env.PROJECTID,
-        storageBucket: process.env.STORAGEBUCKET,
-        messagingSenderId: process.env.MESSAGINGSENDERID,
-        appId: process.env.APPID,
+        apiKey: API_KEY,
+        authDomain: AUTHDOMAIN,
+        databaseURL: DATABASEURL,
+        projectId: PROJECTID,
+        storageBucket: STORAGEBUCKET,
+        messagingSenderId: MESSAGINGSENDERID,
+        appId: APPID,
       };
       firebase.initializeApp(firebaseConfig);
       const db = firebase.database();
