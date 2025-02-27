@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Telegram Online Checker</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vmin;
+        width: 100vmin;
+        margin: 0;
+        background-color: #f4a460;
+        font-family: sans-serif;
+        position: relative;
+      }
+      .menu {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .hidden { display: none; }
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .profile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      .profile-row {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <div class="menu" id="mainMenu">
+      <button id="onePlayer">1P</button>
+      <button id="twoPlayer">2P</button>
+    </div>
+    
+    <div class="overlay hidden" id="twoPlayerMenu">
+      <div class="profile-container">
+        <button id="closeMenu">X</button>
+        <p id="playerName"></p>
+        <input type="text" id="enemyName" placeholder="Введите ник противника" />
+        <button id="sendInvite">Пригласить</button>
+      </div>
+    </div>
+    
+    <div class="profile-container hidden" id="gameScreen">
+      <div class="profile-row">
+        <img id="playerPhoto" src="" width="50" height="50" />
+        <img id="enemyPhoto" src="" width="50" height="50" />
+      </div>
+      <p id="playerNick"></p>
+      <p id="enemyNick"></p>
+    </div>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: process.env.API_KEY,
+        authDomain: process.env.AUTHDOMAIN,
+        databaseURL: process.env.DATABASEURL,
+        projectId: process.env.PROJECTID,
+        storageBucket: process.env.STORAGEBUCKET,
+        messagingSenderId: process.env.MESSAGINGSENDERID,
+        appId: process.env.APPID,
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const roomId = urlParams.get("room") || "default-room";
+
+      let currentUserId = "anonymous";
+      let currentUserName = "Anonymous";
+      let currentUserPhoto = "";
+      if (window.Telegram.WebApp) {
+        const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+        if (initDataUnsafe && initDataUnsafe.user) {
+          currentUserId = initDataUnsafe.user.id;
+          currentUserName = initDataUnsafe.user.first_name;
+          currentUserPhoto = initDataUnsafe.user.photo_url;
+        }
+      }
+
+      document.getElementById("onePlayer").addEventListener("click", () => {
+        document.getElementById("mainMenu").classList.add("hidden");
+        document.getElementById("gameScreen").classList.remove("hidden");
+        document.getElementById("playerNick").innerText = currentUserName;
+        document.getElementById("playerPhoto").src = currentUserPhoto;
+      });
+
+      document.getElementById("twoPlayer").addEventListener("click", () => {
+        document.getElementById("twoPlayerMenu").classList.remove("hidden");
+        document.getElementById("playerName").innerText = currentUserName;
+      });
+
+      document.getElementById("closeMenu").addEventListener("click", () => {
+        document.getElementById("twoPlayerMenu").classList.add("hidden");
+      });
+
+      document.getElementById("sendInvite").addEventListener("click", () => {
+        const enemyNick = document.getElementById("enemyName").value;
+        if (!enemyNick) return;
+        db.ref("invitations/" + enemyNick).set({
+          sender: currentUserName,
+          senderPhoto: currentUserPhoto,
+        });
+      });
+
+      db.ref("invitations/" + currentUserName).on("value", (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+        document.getElementById("twoPlayerMenu").classList.remove("hidden");
+        document.getElementById("playerName").innerText = data.sender;
+        document.getElementById("enemyName").value = currentUserName;
+        const joinButton = document.createElement("button");
+        joinButton.innerText = "Присоединиться";
+        joinButton.addEventListener("click", () => {
+          document.getElementById("mainMenu").classList.add("hidden");
+          document.getElementById("twoPlayerMenu").classList.add("hidden");
+          document.getElementById("gameScreen").classList.remove("hidden");
+          document.getElementById("playerNick").innerText = data.sender;
+          document.getElementById("enemyNick").innerText = currentUserName;
+          document.getElementById("playerPhoto").src = data.senderPhoto;
+          document.getElementById("enemyPhoto").src = currentUserPhoto;
+        });
+        document.getElementById("twoPlayerMenu").appendChild(joinButton);
+      });
+    </script>
+  </body>
+</html>
