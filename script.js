@@ -1,11 +1,11 @@
 const config = {
-  APIKEY: process.env.APIKEY || "your-api-key-here",
-  APPID: process.env.APPID || "your-app-id-here",
-  AUTHDOMAIN: process.env.AUTHDOMAIN || "your-auth-domain-here",
-  DATABASEURL: process.env.DATABASEURL || "your-database-url-here",
-  MESSAGINGSENDERID: process.env.MESSAGINGSENDERID || "your-messaging-sender-id-here",
-  PROJECTID: process.env.PROJECTID || "your-project-id-here",
-  STORAGEBUCKET: process.env.STORAGEBUCKET || "your-storage-bucket-here",
+  APIKEY: "your-injected-api-key",
+  APPID: "your-injected-app-id",
+  AUTHDOMAIN: "your-injected-auth-domain",
+  DATABASEURL: "your-injected-database-url",
+  MESSAGINGSENDERID: "your-injected-messaging-sender-id",
+  PROJECTID: "your-injected-project-id",
+  STORAGEBUCKET: "your-injected-storage-bucket",
 };
 
-console.log(config);
+console.log("Injected Config:", config);
