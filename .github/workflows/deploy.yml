@@ -1,4 +1,4 @@
-name: Deploy Site
+name: Build and Run Website
 
 on:
   push:
@@ -6,18 +6,24 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-run:
     runs-on: ubuntu-latest
+    env:
+      APIKEY: ${{ secrets.APIKEY }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Check out repository code
+        uses: actions/checkout@v4
 
-      - name: Create .env file
-        run: |
-          echo APIKEY=${{ secrets.APIKEY }} > .env
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Mask APIKEY (safeguard)
+        run: echo "::add-mask::${{ secrets.APIKEY }}"
+
+      - name: Run Application
+        run: npm start
