@@ -1,0 +1,26 @@
+name: Deploy Static Site
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Replace Secrets in JavaScript
+        run: |
+          sed -i 's|__APIKEY__|${{ secrets.APIKEY }}|g' script.js
+          sed -i 's|__AUTHDOMAIN__|${{ secrets.AUTHDOMAIN }}|g' script.js
+          sed -i 's|__DATABASEURL__|${{ secrets.DATABASEURL }}|g' script.js
+          sed -i 's|__PROJECTID__|${{ secrets.PROJECTID }}|g' script.js
+          sed -i 's|__STORAGEBUCKET__|${{ secrets.STORAGEBUCKET }}|g' script.js
+          sed -i 's|__MESSAGINGSENDERID__|${{ secrets.MESSAGINGSENDERID }}|g' script.js
+          sed -i 's|__APPID__|${{ secrets.APPID }}|g' script.js
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: .
