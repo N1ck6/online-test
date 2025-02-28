@@ -1,11 +1,11 @@
-import config from './env.js';
+const config = {
+  APIKEY: process.env.APIKEY || "your-api-key-here",
+  APPID: process.env.APPID || "your-app-id-here",
+  AUTHDOMAIN: process.env.AUTHDOMAIN || "your-auth-domain-here",
+  DATABASEURL: process.env.DATABASEURL || "your-database-url-here",
+  MESSAGINGSENDERID: process.env.MESSAGINGSENDERID || "your-messaging-sender-id-here",
+  PROJECTID: process.env.PROJECTID || "your-project-id-here",
+  STORAGEBUCKET: process.env.STORAGEBUCKET || "your-storage-bucket-here",
+};
 
-const apikey = config.APIKEY;
-const appid = config.APPID;
-const authdomain = config.AUTHDOMAIN;
-const databaseurl = config.DATABASEURL;
-const messagingsenderid = config.MESSAGINGSENDERID;
-const projectid = config.PROJECTID;
-const storagebucket = config.STORAGEBUCKET;
-
-console.log(apikey, appid, authdomain, databaseurl, messagingsenderid, projectid, storagebucket);
+console.log(config);
