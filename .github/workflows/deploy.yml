@@ -1,4 +1,4 @@
-name: Build and Run Website
+name: Build and Deploy Website
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-run:
+  build-and-deploy:
     runs-on: ubuntu-latest
     env:
       APIKEY: ${{ secrets.APIKEY }}
@@ -14,16 +14,14 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install
+      - name: Replace API key placeholder
+        run: |
+          sed -i "s/__API_KEY__/${APIKEY}/g" script.js
 
       - name: Mask APIKEY (safeguard)
         run: echo "::add-mask::${{ secrets.APIKEY }}"
 
-      - name: Run Application
-        run: npm start
+      - name: Serve the website
+        run: |
+          echo "Serving the website..."
+          cat script.js
