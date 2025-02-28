@@ -25,10 +25,10 @@ jobs:
       - name: Append env.js to script.js
         run: |
           echo "import config from './env.js';" >> script.js
-          echo "const apikey = config.APIKEY;" >> script.js
-          echo "const appid = config.APPID;" >> script.js
-          echo "const authdomain = config.AUTHDOMAIN;" >> script.js
-          echo "const databaseurl = config.DATABASEURL;" >> script.js
-          echo "const messagingsenderid = config.MESSAGINGSENDERID;" >> script.js
-          echo "const projectid = config.PROJECTID;" >> script.js
-          echo "const storagebucket = config.STORAGEBUCKET;" >> script.js
+          echo "const apikey1 = config.APIKEY;" >> script.js
+          echo "const appid1 = config.APPID;" >> script.js
+          echo "const authdomain1 = config.AUTHDOMAIN;" >> script.js
+          echo "const databaseurl1 = config.DATABASEURL;" >> script.js
+          echo "const messagingsenderid1 = config.MESSAGINGSENDERID;" >> script.js
+          echo "const projectid1 = config.PROJECTID;" >> script.js
+          echo "const storagebucket1 = config.STORAGEBUCKET;" >> script.js
