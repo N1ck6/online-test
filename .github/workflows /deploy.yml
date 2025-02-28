@@ -1,34 +1,26 @@
-name: Set Environment Variables
+name: Inject Secrets
 
 on: [push]
 
 jobs:
-  build:
+  inject-secrets:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Create env.js file
+      - name: Create script.js with Secrets
         run: |
-          echo "const config = {" > env.js
-          echo "  APIKEY: '${{ secrets.APIKEY }}'," >> env.js
-          echo "  APPID: '${{ secrets.APPID }}'," >> env.js
-          echo "  AUTHDOMAIN: '${{ secrets.AUTHDOMAIN }}'," >> env.js
-          echo "  DATABASEURL: '${{ secrets.DATABASEURL }}'," >> env.js
-          echo "  MESSAGINGSENDERID: '${{ secrets.MESSAGINGSENDERID }}'," >> env.js
-          echo "  PROJECTID: '${{ secrets.PROJECTID }}'," >> env.js
-          echo "  STORAGEBUCKET: '${{ secrets.STORAGEBUCKET }}'" >> env.js
-          echo "};" >> env.js
-          echo "export default config;" >> env.js
+          echo "const config = {" > script.js
+          echo "  APIKEY: '${{ secrets.APIKEY }}'," >> script.js
+          echo "  APPID: '${{ secrets.APPID }}'," >> script.js
+          echo "  AUTHDOMAIN: '${{ secrets.AUTHDOMAIN }}'," >> script.js
+          echo "  DATABASEURL: '${{ secrets.DATABASEURL }}'," >> script.js
+          echo "  MESSAGINGSENDERID: '${{ secrets.MESSAGINGSENDERID }}'," >> script.js
+          echo "  PROJECTID: '${{ secrets.PROJECTID }}'," >> script.js
+          echo "  STORAGEBUCKET: '${{ secrets.STORAGEBUCKET }}'" >> script.js
+          echo "};" >> script.js
+          echo "console.log(config);" >> script.js
 
-      - name: Append env.js to script.js
-        run: |
-          echo "import config from './env.js';" >> script.js
-          echo "const apikey1 = config.APIKEY;" >> script.js
-          echo "const appid1 = config.APPID;" >> script.js
-          echo "const authdomain1 = config.AUTHDOMAIN;" >> script.js
-          echo "const databaseurl1 = config.DATABASEURL;" >> script.js
-          echo "const messagingsenderid1 = config.MESSAGINGSENDERID;" >> script.js
-          echo "const projectid1 = config.PROJECTID;" >> script.js
-          echo "const storagebucket1 = config.STORAGEBUCKET;" >> script.js
+      - name: Verify script.js
+        run: cat script.js
