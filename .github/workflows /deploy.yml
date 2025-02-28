@@ -1,26 +1,29 @@
-name: Deploy Static Site
+name: Update Secrets in JS
 
 on: [push]
 
 jobs:
-  deploy:
+  update-js-secrets:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Replace Secrets in JavaScript
+      - name: Replace Secrets in script.js
         run: |
           sed -i 's|__APIKEY__|${{ secrets.APIKEY }}|g' script.js
+          sed -i 's|__APPID__|${{ secrets.APPID }}|g' script.js
           sed -i 's|__AUTHDOMAIN__|${{ secrets.AUTHDOMAIN }}|g' script.js
           sed -i 's|__DATABASEURL__|${{ secrets.DATABASEURL }}|g' script.js
+          sed -i 's|__MESSAGINGSENDERID__|${{ secrets.MESSAGINGSENDERID }}|g' script.js
           sed -i 's|__PROJECTID__|${{ secrets.PROJECTID }}|g' script.js
           sed -i 's|__STORAGEBUCKET__|${{ secrets.STORAGEBUCKET }}|g' script.js
-          sed -i 's|__MESSAGINGSENDERID__|${{ secrets.MESSAGINGSENDERID }}|g' script.js
-          sed -i 's|__APPID__|${{ secrets.APPID }}|g' script.js
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: .
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add script.js
+          git commit -m "Updated script.js with secrets" || echo "No changes to commit"
+          git push
