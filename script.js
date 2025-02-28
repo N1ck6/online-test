@@ -1,12 +1,11 @@
 const firebaseConfig = {
-    apiKey: "__APIKEY__",
-    appId: "__APPID__",
-    authDomain: "__AUTHDOMAIN__",
-    databaseURL: "__DATABASEURL__",
-    messagingSenderId: "__MESSAGINGSENDERID__",
-    projectId: "__PROJECTID__",
-    storageBucket: "__STORAGEBUCKET__"
-};
+    apiKey: apiKey1,
+    appId: appId1,
+    authDomain: authDomain1,
+    databaseURL: databaseURL1,
+    messagingSenderId: messagingSenderId1,
+    projectId: projectId1,
+    storageBucket: storageBucket1};
 
 console.log("Firebase Config Loaded:", firebaseConfig);
 
