@@ -1,29 +1,34 @@
-name: Update Secrets in JS
+name: Set Environment Variables
 
 on: [push]
 
 jobs:
-  update-js-secrets:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Replace Secrets in script.js
+      - name: Create env.js file
         run: |
-          sed -i 's|__APIKEY__|${{ secrets.APIKEY }}|g' script.js
-          sed -i 's|__APPID__|${{ secrets.APPID }}|g' script.js
-          sed -i 's|__AUTHDOMAIN__|${{ secrets.AUTHDOMAIN }}|g' script.js
-          sed -i 's|__DATABASEURL__|${{ secrets.DATABASEURL }}|g' script.js
-          sed -i 's|__MESSAGINGSENDERID__|${{ secrets.MESSAGINGSENDERID }}|g' script.js
-          sed -i 's|__PROJECTID__|${{ secrets.PROJECTID }}|g' script.js
-          sed -i 's|__STORAGEBUCKET__|${{ secrets.STORAGEBUCKET }}|g' script.js
+          echo "const config = {" > env.js
+          echo "  APIKEY: '${{ secrets.APIKEY }}'," >> env.js
+          echo "  APPID: '${{ secrets.APPID }}'," >> env.js
+          echo "  AUTHDOMAIN: '${{ secrets.AUTHDOMAIN }}'," >> env.js
+          echo "  DATABASEURL: '${{ secrets.DATABASEURL }}'," >> env.js
+          echo "  MESSAGINGSENDERID: '${{ secrets.MESSAGINGSENDERID }}'," >> env.js
+          echo "  PROJECTID: '${{ secrets.PROJECTID }}'," >> env.js
+          echo "  STORAGEBUCKET: '${{ secrets.STORAGEBUCKET }}'" >> env.js
+          echo "};" >> env.js
+          echo "export default config;" >> env.js
 
-      - name: Commit and Push Changes
+      - name: Append env.js to script.js
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add script.js
-          git commit -m "Updated script.js with secrets" || echo "No changes to commit"
-          git push
+          echo "import config from './env.js';" >> script.js
+          echo "const apikey = config.APIKEY;" >> script.js
+          echo "const appid = config.APPID;" >> script.js
+          echo "const authdomain = config.AUTHDOMAIN;" >> script.js
+          echo "const databaseurl = config.DATABASEURL;" >> script.js
+          echo "const messagingsenderid = config.MESSAGINGSENDERID;" >> script.js
+          echo "const projectid = config.PROJECTID;" >> script.js
+          echo "const storagebucket = config.STORAGEBUCKET;" >> script.js
