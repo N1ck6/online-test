@@ -21,11 +21,12 @@ jobs:
         run: |
           sed -i "s/__SECRET_WORD__/${SECRET_WORD}/g" script.js
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # The directory containing the files to be deployed
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
 
       - name: Clean Up
         run: |
