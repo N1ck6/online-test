@@ -15,11 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Generate Dynamic File
+      - name: Replace Secret Placeholder
         env:
           SECRET_WORD: ${{ secrets.HIDDEN_WORD }}
         run: |
-          echo "document.getElementById('output').innerHTML = '${SECRET_WORD}';" > script.js
+          sed -i "s/__SECRET_WORD__/${SECRET_WORD}/g" script.js
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -28,4 +28,6 @@ jobs:
           publish_dir: ./  # The directory containing the files to be deployed
 
       - name: Clean Up
-        run: rm script.js  # Delete the generated file to avoid committing it
+        run: |
+          # Optionally clean up any generated files if needed
+          echo "Clean up step"
