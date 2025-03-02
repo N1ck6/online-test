@@ -9,7 +9,7 @@ jobs:
     permissions:
       contents: read
       pages: write
-      id-token: write  # Ensure this permission is set
+      id-token: write
 
     steps:
       - name: Checkout code
@@ -21,8 +21,25 @@ jobs:
         run: |
           echo "document.getElementById('output').innerHTML = '${SECRET_WORD}';" > script.js
 
+      - name: Build and Upload Artifact
+        run: |
+          # Ensure all necessary files are in the build directory
+          mkdir -p build
+          cp index.html script.js build/
+          # Upload the build directory as an artifact
+          zip -r build.zip build
+          echo "::set-output name=artifact_name::build.zip"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build.zip
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
+        with:
+          source_dir: build
 
       - name: Clean Up
-        run: rm script.js  # Delete the generated file to avoid committing it
+        run: rm script.js build.zip  # Delete the generated file and artifact to avoid committing them
