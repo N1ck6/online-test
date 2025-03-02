@@ -1,34 +1,30 @@
-name: Deploy with Secret
+name: CI
+
 on:
   push:
-    branches: [main]
+    branches:
+      - master
 
 jobs:
-  build-and-deploy:
+  build:
+
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    
+    - name: Checkout
+      uses: actions/checkout@v1
 
-      - name: Replace Secret Placeholder
-        env:
-          SECRET_WORD: ${{ secrets.HIDDEN_WORD }}
-        run: |
-          sed -i "s/__SECRET_WORD__/${SECRET_WORD}/g" script.js
+    - name: Build
+      run: |
+        npm install
+        npm run-script build
+      env:
+        SECRET_WORD: ${{ secrets.HIDDEN_WORD }}
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: build
-
-      - name: Clean Up
-        run: |
-          # Optionally clean up any generated files if needed
-          echo "Clean up step"
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: build
