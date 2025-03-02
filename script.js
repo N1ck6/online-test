@@ -1,2 +1,2 @@
-const apiSecret = process.env.HIDDEN_WORD
+const apiSecret = process.env.SECRET_WORD
 document.getElementById('output').innerHTML = secretWord;
