@@ -21,7 +21,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.PAGES_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: build
 
       - name: Clean Up
         run: rm script.js
