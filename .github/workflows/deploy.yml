@@ -1,0 +1,23 @@
+name: Deploy with Secret
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate Dynamic File
+        env:
+          SECRET_WORD: ${{ secrets.HIDDEN_WORD }}
+        run: |
+          echo "document.getElementById('output').innerHTML = '${SECRET_WORD}';" > script.js
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
+
+      - name: Clean Up
+        run: rm script.js  # Delete the generated file to avoid committing it
