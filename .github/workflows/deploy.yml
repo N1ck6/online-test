@@ -13,12 +13,3 @@ jobs:
       - name: Generate Dynamic File
         env:
           SECRET_WORD: ${{ secrets.HIDDEN_WORD }}
-        run: |
-          echo "document.getElementById('output').innerHTML = '${SECRET_WORD}';" > script.js
-          
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_KEY }}
-          BRANCH: gh-pages
-          FOLDER: dist
