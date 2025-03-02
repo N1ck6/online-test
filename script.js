@@ -1,4 +1,2 @@
-// Placeholder for the secret word
-const secretWord = '__SECRET_WORD__';
-
+const apiSecret = process.env.HIDDEN_WORD
 document.getElementById('output').innerHTML = secretWord;
