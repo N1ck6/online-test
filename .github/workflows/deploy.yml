@@ -1,15 +1,15 @@
-name: Deploy with Secret
-on:
-  push:
-    branches: [main]
+name: Inject Secrets into JS
+
+on: [push]
 
 jobs:
-  build-and-deploy:
+  inject-secrets:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
-      - name: Generate Dynamic File
-        env:
-          SECRET_WORD: ${{ secrets.HIDDEN_WORD }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Inject Secrets into script.js
+        run: |
+          echo "console.log('Injected Config!');" >> script.js
