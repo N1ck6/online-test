@@ -1,15 +1,17 @@
-name: Inject Secrets into JS
+name: Inject Line into JS
 
 on: [push]
 
 jobs:
-  inject-secrets:
+  inject-line:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Inject Secrets into script.js
-        run: |
-          echo "console.log('Injected Config!');" >> script.js
+      - name: Inject Console Log into script.js
+        run: echo "console.log('Injected Config!');" >> script.js
+
+      - name: Verify script.js
+        run: cat script.js
