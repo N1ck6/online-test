@@ -1,4 +1,4 @@
-name: Inject Line into JS
+name: Inject Line into JS and Commit
 
 on: [push]
 
@@ -13,5 +13,10 @@ jobs:
       - name: Inject Console Log into script.js
         run: echo "console.log('Injected Config!');" >> script.js
 
-      - name: Verify script.js
-        run: cat script.js
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add script.js
+          git commit -m "Injected console.log into script.js"
+          git push
