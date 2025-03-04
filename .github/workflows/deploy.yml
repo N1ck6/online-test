@@ -18,10 +18,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Deploy to GitHub Pages
+      - name: Create gh-pages Branch and Keep script.js
         run: |
           git checkout --orphan gh-pages
-          git rm -rf .
+          git reset --hard
           git add script.js
           git commit -m "Deploy modified script.js"
           git push -f origin gh-pages
