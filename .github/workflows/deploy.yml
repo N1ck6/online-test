@@ -1,22 +1,27 @@
-name: Inject Line into JS and Commit
+name: Deploy Edited script.js to GitHub Pages
 
 on: [push]
 
 jobs:
-  inject-line:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Inject Console Log into script.js
+      - name: Modify script.js
         run: echo "console.log('Injected Config!');" >> script.js
 
-      - name: Commit and Push Changes
+      - name: Setup Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git checkout --orphan gh-pages
+          git rm -rf .
           git add script.js
-          git commit -m "Injected console.log into script.js"
-          git push
+          git commit -m "Deploy modified script.js"
+          git push -f origin gh-pages
