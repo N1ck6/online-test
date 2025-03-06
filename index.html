@@ -2,9 +2,13 @@
 <html>
 <head>
   <title>Секрет</title>
+  <script src="config.js"></script>
 </head>
 <body>
   <h1>Значение SECRET:</h1>
-  <div id="secret"><!-- SECRET_VALUE --></div>
+  <div id="secret">Загрузка...</div>
+  <script>
+    document.getElementById('secret').textContent = SECRET;
+  </script>
 </body>
 </html>
