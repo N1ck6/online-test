@@ -1,26 +1,22 @@
-name: Deploy Edited script.js to GitHub Pages
-
-on: [push]
-
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Modify script.js
-        run: echo "console.log('Injected Config!');" >> script.js
-
-      - name: Setup Git
+      - name: Replace secret placeholder
+        env:
+          SECRET: ${{ secrets.TEST }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          sed -i "s/<!-- SECRET_VALUE -->/${SECRET}/g" index.html
 
-      - name: Create gh-pages Branch and Keep script.js
-        run: |
-          git checkout --orphan gh-pages
-          git add script.js
-          git commit -m "Deploy modified script.js"
-          git push -f origin gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
