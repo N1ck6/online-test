@@ -1,0 +1,1 @@
+const SECRET = "SECRET_VALUE";
